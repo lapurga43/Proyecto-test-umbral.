@@ -4,21 +4,24 @@
 }
 
 body {
-    background: radial-gradient(circle at top, #e6dcff, #b8c7ff, #9aa7e8);
-    min-height: 100vh;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    background: radial-gradient(circle at top, #e6dcff, #b8c7ff, #9aa7e8);
+    background-size: 200% 200%;
+    animation: fondoVivo 18s ease infinite;
 }
 
-/* CENTRADO PERFECTO */
+/* CENTRADO */
 .pagina {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
+    min-height: 100vh;
 }
 
-/* TARJETA PRINCIPAL */
+/* CAJA PRINCIPAL */
 .caja {
     background: rgba(255,255,255,0.95);
     backdrop-filter: blur(8px);
@@ -29,21 +32,23 @@ body {
     box-shadow:
         0 20px 40px rgba(75,0,130,0.25),
         inset 0 0 0 1px rgba(255,255,255,0.4);
-    animation: aparecer 1.2s cubic-bezier(.22,.61,.36,1);
+    animation: aparecer 1.2s cubic-bezier(.22,.61,.36,1),
+               flotacion 6s ease-in-out infinite;
 }
 
 /* TÍTULOS */
 h1 {
+    text-align: center;
     font-size: 28px;
-    margin-bottom: 20px;
     color: #4b0082;
-    letter-spacing: 0.5px;
+    margin-bottom: 20px;
 }
 
 h2 {
+    text-align: center;
     font-size: 22px;
-    margin-bottom: 15px;
     color: #5a1ba8;
+    margin-bottom: 15px;
 }
 
 /* INPUTS */
@@ -55,7 +60,7 @@ input {
     border: 1px solid #d0c8ff;
     background: #f9f8ff;
     font-size: 15px;
-    transition: all 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 input:focus {
@@ -63,6 +68,7 @@ input:focus {
     border-color: #7b5cff;
     box-shadow: 0 0 0 3px rgba(123,92,255,0.25);
     background: #ffffff;
+    transform: scale(1.015);
 }
 
 /* BOTÓN */
@@ -76,8 +82,10 @@ button {
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
     box-shadow: 0 8px 20px rgba(106,0,255,0.35);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 button:hover {
@@ -89,6 +97,19 @@ button:active {
     transform: scale(0.98);
 }
 
+button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(255,255,255,0.35) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+button:hover::after {
+    opacity: 1;
+}
+
 /* TARJETAS DE PREGUNTAS */
 .pregunta-card {
     background: linear-gradient(145deg, #ffffff, #f0ebff);
@@ -96,11 +117,15 @@ button:active {
     border-radius: 16px;
     margin-bottom: 18px;
     box-shadow: 0 8px 18px rgba(0,0,0,0.12);
-    transition: transform 0.2s ease;
+    animation: preguntaIn 0.6s ease both;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .pregunta-card:hover {
     transform: scale(1.01);
+    box-shadow:
+        0 12px 30px rgba(123,92,255,0.25),
+        inset 0 0 0 1px rgba(123,92,255,0.15);
 }
 
 .pregunta-card p {
@@ -109,7 +134,7 @@ button:active {
     font-weight: 600;
 }
 
-/* RADIOS MÁS BONITOS */
+/* RADIOS */
 label {
     display: block;
     margin-bottom: 6px;
@@ -120,6 +145,11 @@ input[type="radio"] {
     accent-color: #7b5cff;
     transform: scale(1.15);
     margin-right: 6px;
+    transition: transform 0.15s ease;
+}
+
+input[type="radio"]:checked {
+    transform: scale(1.35);
 }
 
 /* RESULTADO */
@@ -128,7 +158,7 @@ input[type="radio"] {
     border-radius: 18px;
     padding: 25px;
     box-shadow: 0 10px 25px rgba(0,150,80,0.25);
-    animation: aparecer 0.8s ease;
+    animation: resultadoIn 1s ease both;
 }
 
 #mensajeResultado {
@@ -137,18 +167,30 @@ input[type="radio"] {
     line-height: 1.6;
 }
 
-/* ANIMACIÓN DE ENTRADA */
+/* ANIMACIONES */
 @keyframes aparecer {
-    from {
-        opacity: 0;
-        transform: translateY(25px) scale(0.98);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+    from { opacity: 0; transform: translateY(25px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.modal button {
-    display: none !important;
+@keyframes flotacion {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+    100% { transform: translateY(0); }
+}
+
+@keyframes fondoVivo {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes preguntaIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes resultadoIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
 }
